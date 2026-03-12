@@ -1,0 +1,14 @@
+# Ignore IDE files
+.idea/
+.vscode/
+
+# Ignore Java build files
+Spring-Boot-Backend/target/
+backend/.mvn/
+
+# Ignore React dependencies
+React-Frontend/node_modules/
+React-Frontend/dist/
+
+# Ignore environment variables
+.env
