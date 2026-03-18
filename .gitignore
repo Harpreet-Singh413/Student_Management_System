@@ -12,3 +12,7 @@ React-Frontend/dist/
 
 # Ignore environment variables
 .env
+
+#Ignore Ressources
+Spring-Boot-Backend/src/main/resources/application.properties
+Spring-Boot-Backend/src/main/resources/data.sql
