@@ -14,4 +14,8 @@ public class CourseService {
     public List<Course> getAllCourses() {
         return repo.findAll();
     }
+
+    public Long countCourses() {
+        return repo.count();
+    }
 }

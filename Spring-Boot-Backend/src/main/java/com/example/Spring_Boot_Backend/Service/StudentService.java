@@ -13,6 +13,10 @@ public class StudentService {
     @Autowired
     private StudentRepo repo;
 
+    public Long countStudents(){
+        return repo.count();
+    }
+
     public List<Student> getAllStudents() {
         return repo.findAll();
     }

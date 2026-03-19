@@ -14,4 +14,8 @@ public class DepartmentService {
     public List<Department> getAllStudents() {
         return repo.findAll();
     }
+
+    public Long countDepartments() {
+        return repo.count();
+    }
 }

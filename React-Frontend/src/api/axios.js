@@ -45,6 +45,7 @@ export const loginAdmin = (credentials) => API.post("/auth/login", credentials);
 // Student CRUD Operations
 export const getStudents = () => API.get("/students");
 export const getStudentById = (id) => API.get(`/students/${id}`);
+export const getStudentStats = () => API.get("/stats");
 export const addStudent = (studentData) => API.post("/students", studentData);
 export const updateStudent = (id, studentData) => API.put(`/students/${id}`, studentData);
 export const deleteStudent = (id) => API.delete(`/students/${id}`);
