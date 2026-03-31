@@ -52,7 +52,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         // Allow your React local server
-        configuration.setAllowedOrigins(Arrays.asList("http://student-management-system-two-fawn.vercel.app"));
+        configuration.setAllowedOrigins(Arrays.asList("https://student-management-system-two-fawn.vercel.app"));
 
         // Allow standard methods
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));

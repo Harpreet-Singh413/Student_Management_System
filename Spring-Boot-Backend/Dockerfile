@@ -1,12 +1,22 @@
-# Use Eclipse Temurin for Java 25 (Ubuntu Noble base)
-FROM eclipse-temurin:25-jdk-noble
+# Stage 1: Build the application
+FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Copy the JAR you built with Maven
-COPY target/*.jar app.jar
+# Copy the pom.xml and source code
+COPY pom.xml .
+COPY src ./src
 
-# Standard Spring Boot port
+# Build the JAR (this creates the target folder inside Docker)
+RUN mvn clean package -DskipTests
+
+# Stage 2: Run the application
+FROM eclipse-temurin:17-jre-jammy
+WORKDIR /app
+
+# Copy the JAR from the build stage
+COPY --from=build /app/target/*.jar app.jar
+
+# Render uses the PORT environment variable
 EXPOSE 8080
 
-# Run the app
 ENTRYPOINT ["java", "-jar", "app.jar"]
