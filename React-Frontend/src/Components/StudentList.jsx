@@ -1,27 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
-import { getStudents, deleteStudent } from '../api/axios';
+import API from '../api/axios'; // Using the same API instance as AddStudent
 import { FiSearch, FiTrash2, FiEdit } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 
 const StudentList = () => {
   const [students, setStudents] = useState([]);
+  const [departments, setDepartments] = useState([]); // New state for live departments
   const [searchTerm, setSearchTerm] = useState('');
-  const [filter, setFilter] = useState({ dept: '', course: '' });
+  const [filter, setFilter] = useState({ dept: '' });
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const navigate = useNavigate();
 
-  const fetchData = async () => {
+  useEffect(() => {
+    fetchInitialData();
+  }, []);
+
+  const fetchInitialData = async () => {
     try {
-      const res = await getStudents();
-      setStudents(res.data);
+      setLoading(true);
+      // Fetch both students and departments simultaneously
+      const [studentRes, deptRes] = await Promise.all([
+        API.get('/students'),
+        API.get('/departments')
+      ]);
+      setStudents(studentRes.data);
+      setDepartments(deptRes.data);
     } catch (err) {
-      console.error("Error fetching students", err);
+      console.error("Error fetching data", err);
     } finally {
       setLoading(false);
     }
@@ -30,7 +37,7 @@ const StudentList = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this student?")) {
       try {
-        await deleteStudent(id);
+        await API.delete(`/students/${id}`);
         setStudents(students.filter(s => s.id !== id));
       } catch (err) {
         alert("Failed to delete student");
@@ -38,17 +45,17 @@ const StudentList = () => {
     }
   };
 
-  // ✅ Corrected search + filter logic
+  // ✅ Filtering logic
   const filteredStudents = students.filter(student => {
     const fullName = `${student.firstName} ${student.lastName}`.toLowerCase();
     const matchesSearch =
       fullName.includes(searchTerm.toLowerCase()) ||
       student.email?.toLowerCase().includes(searchTerm.toLowerCase());
 
+    // Match by Department Name (since that's what the UI usually displays)
     const matchesDept = filter.dept ? student.department?.dName === filter.dept : true;
-    const matchesCourse = filter.course ? student.course?.cName === filter.course : true;
 
-    return matchesSearch && matchesDept && matchesCourse;
+    return matchesSearch && matchesDept;
   });
 
   return (
@@ -75,16 +82,18 @@ const StudentList = () => {
             />
           </div>
 
+          {/* ✅ LIVE DEPARTMENTS DROPDOWN */}
           <select
-            className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl outline-none"
+            className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
+            value={filter.dept}
             onChange={(e) => setFilter({ ...filter, dept: e.target.value })}
           >
             <option value="">All Departments</option>
-            <option value="Computer Science & Engineering">Computer Science & Engineering</option>
-            <option value="Information Technology">Information Technology</option>
-            <option value="Mechanical Engineering">Mechanical Engineering</option>
-            <option value="Electrical Engineering">Electrical Engineering</option>
-            <option value="Business Administration">Business Administration</option>
+            {departments.map((dept) => (
+              <option key={dept.did} value={dept.dName}>
+                {dept.dName}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -104,7 +113,9 @@ const StudentList = () => {
             </thead>
             <tbody className="divide-y divide-gray-50">
               {loading ? (
-                <tr><td colSpan="6" className="text-center py-10 text-gray-400">Loading students...</td></tr>
+                <tr>
+                  <td colSpan="7" className="text-center py-10 text-gray-400">Loading students...</td>
+                </tr>
               ) : filteredStudents.map((student) => (
                 <tr key={student.id} className="hover:bg-blue-50/30 transition-colors">
                   <td className="px-6 py-4 font-medium text-gray-700">{student.id}</td>
@@ -116,11 +127,16 @@ const StudentList = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-gray-600">{student.course?.cName}</td>
-                  <td className="px-6 py-4 text-gray-600">{student.dob ? student.dob.split('T')[0] : ''}</td>
+                  <td className="px-6 py-4 text-gray-600">
+                    {student.dob ? student.dob.split('T')[0] : 'N/A'}
+                  </td>
                   <td className="px-6 py-4 flex gap-3">
-                    <button className="text-blue-500 hover:text-blue-700" onClick={() => navigate(`/edit-student/${student.id}`)}>
+                    <button 
+                      className="text-blue-500 hover:text-blue-700" 
+                      onClick={() => navigate(`/edit-student/${student.id}`)}
+                    >
                       <FiEdit />
-                      </button>
+                    </button>
                     <button
                       onClick={() => handleDelete(student.id)}
                       className="text-red-500 hover:text-red-700"
@@ -133,7 +149,9 @@ const StudentList = () => {
             </tbody>
           </table>
           {!loading && filteredStudents.length === 0 && (
-            <div className="text-center py-10 text-gray-500 font-medium italic">No students found.</div>
+            <div className="text-center py-10 text-gray-500 font-medium italic">
+              No students found.
+            </div>
           )}
         </div>
       </main>
