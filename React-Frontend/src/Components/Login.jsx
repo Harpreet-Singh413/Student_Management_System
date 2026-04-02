@@ -4,7 +4,6 @@ import { FiUser, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 import API from '../api/axios';
 
 const Login = () => {
-  // Changed email to username here
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -21,10 +20,9 @@ const Login = () => {
     setLoading(true);
 
     try {
-      // Sends { username, password } to your Spring Boot backend
+      // Sends { username, password } to the Spring Boot backend
       const response = await API.post('/auth/login', credentials);
       localStorage.setItem('token', response.data);
-      console.log(response.data);
       navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid username or password');
@@ -62,7 +60,7 @@ const Login = () => {
             <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
-              name="username" // Changed name to username
+              name="username"
               required
               value={credentials.username}
               onChange={handleChange}

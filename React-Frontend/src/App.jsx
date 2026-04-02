@@ -11,10 +11,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Public Route: Login */}
         <Route path="/login" element={<Login />} />
 
-        {/* Protected Routes: Locked behind the check */}
         <Route 
           path="/dashboard" 
           element={
@@ -24,7 +22,6 @@ function App() {
           } 
         />
 
-        {/* Example: Another protected route for student management */}
         <Route 
           path="/students" 
           element={

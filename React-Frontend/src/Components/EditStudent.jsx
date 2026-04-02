@@ -20,8 +20,6 @@ const EditStudent = () => {
       try {
         const [studentRes, deptRes, courseRes] = await Promise.all([
           getStudentById(id),
-          // reuse your API instance
-          // if you don’t have these helpers, use API.get('/departments') and API.get('/courses')
           API.get('/departments'),
           API.get('/course')
         ]);

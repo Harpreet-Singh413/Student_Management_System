@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
-import API from '../api/axios'; // Using the same API instance as AddStudent
+import API from '../api/axios';
 import { FiSearch, FiTrash2, FiEdit } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 
 const StudentList = () => {
   const [students, setStudents] = useState([]);
-  const [departments, setDepartments] = useState([]); // New state for live departments
+  const [departments, setDepartments] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState({ dept: '' });
   const [loading, setLoading] = useState(true);
@@ -45,7 +45,7 @@ const StudentList = () => {
     }
   };
 
-  // ✅ Filtering logic
+  //Filtering logic
   const filteredStudents = students.filter(student => {
     const fullName = `${student.firstName} ${student.lastName}`.toLowerCase();
     const matchesSearch =
@@ -82,7 +82,7 @@ const StudentList = () => {
             />
           </div>
 
-          {/* ✅ LIVE DEPARTMENTS DROPDOWN */}
+          {/*LIVE DEPARTMENTS DROPDOWN */}
           <select
             className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
             value={filter.dept}
