@@ -6,6 +6,7 @@ import ProtectedRoute from './Components/ProtectedRoute';
 import AddStudent from './Components/AddStudent';
 import StudentList from './Components/StudentList';
 import EditStudent from './Components/EditStudent';
+import StudentProfile from './Components/StudentProfile';
 
 function App() {
   return (
@@ -37,7 +38,7 @@ function App() {
         <Route 
           path="/add-student" 
           element={
-            <ProtectedRoute>
+            <ProtectedRoute adminOnly={true}>
               <AddStudent />
             </ProtectedRoute>
           } 
@@ -46,8 +47,16 @@ function App() {
         <Route
           path="/edit-student/:id"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute adminOnly={true}>
               <EditStudent/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student-profile/:id"
+          element={
+            <ProtectedRoute>
+              <StudentProfile />
             </ProtectedRoute>
           }
         />

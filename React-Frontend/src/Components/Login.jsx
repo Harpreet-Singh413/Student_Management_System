@@ -44,8 +44,8 @@ const Login = () => {
           <div className="mx-auto w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg mb-4">
             <span className="text-2xl text-white font-bold">SMS</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-gray-900">Admin Login</h1>
-          <p className="text-gray-500 text-sm mt-1">Access the Management System</p>
+          <h1 className="text-3xl font-extrabold text-gray-900">SMS Login</h1>
+          <p className="text-gray-500 text-sm mt-1">Student Management System</p>
         </div>
 
         {error && (

@@ -1,5 +1,6 @@
 package com.example.Spring_Boot_Backend.Service;
 
+import com.example.Spring_Boot_Backend.Model.UserPrinciples;
 import com.example.Spring_Boot_Backend.Model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +24,10 @@ public class UserService {
     public String verify(Users user){
         Authentication authentication =
                 authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
-        if(authentication.isAuthenticated()) return jwtService.generateToken(user.getUsername());
+        if(authentication.isAuthenticated()){
+            UserPrinciples principles = (UserPrinciples) authentication.getPrincipal();
+            return jwtService.generateToken(user.getUsername(),principles.getUser().getRole());
+        }
         return "fail";
     }
 }

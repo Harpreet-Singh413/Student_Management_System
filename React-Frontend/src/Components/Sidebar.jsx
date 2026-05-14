@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiGrid, FiUsers, FiUserPlus, FiLogOut, FiBookOpen } from 'react-icons/fi';
+import { isAdmin } from '../utils/auth';
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -9,6 +10,8 @@ const Sidebar = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
+
+  const admin = isAdmin();
 
   return (
     <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col fixed left-0 top-0">
@@ -25,9 +28,11 @@ const Sidebar = () => {
         <Link to="/students" className="flex items-center gap-3 p-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all">
           <FiUsers /> All Students
         </Link>
-        <Link to="/add-student" className="flex items-center gap-3 p-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all">
-          <FiUserPlus /> Add Student
-        </Link>
+        {admin && (
+          <Link to="/add-student" className="flex items-center gap-3 p-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all">
+            <FiUserPlus /> Add Student
+          </Link>
+        )}
       </nav>
 
       <div className="p-4 border-t border-gray-100">

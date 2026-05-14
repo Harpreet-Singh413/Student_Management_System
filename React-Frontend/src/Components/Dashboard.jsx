@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import { getStudentStats } from "../api/axios";
+import { getUserFromToken } from '../utils/auth';
 
 const Dashboard = () => {
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const user = getUserFromToken();
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -36,7 +37,12 @@ const Dashboard = () => {
       <main className="flex-1 ml-64 p-8">
         <header className="mb-8">
           <h2 className="text-3xl font-bold text-gray-800">System Overview</h2>
-          <p className="text-gray-500">Welcome back, Admin.</p>
+          <p className="text-gray-500">
+            Welcome back, <span className="font-semibold text-blue-600">{user?.username || 'User'}</span> 
+            <span className="ml-2 text-xs bg-gray-200 px-2 py-1 rounded-md text-gray-600 uppercase tracking-tighter">
+              {user?.role}
+            </span>
+          </p>
         </header>
 
         {/* Stats Grid */}

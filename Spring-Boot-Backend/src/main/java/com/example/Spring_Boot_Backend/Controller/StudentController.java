@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:5175")
+
 public class StudentController {
     @Autowired
     StudentService service;
@@ -53,12 +53,6 @@ public class StudentController {
         catch(Exception e){
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
-//        if(stu1 != null){
-//            return new ResponseEntity("Updated",HttpStatus.OK);
-//        }
-//        else {
-//            return new ResponseEntity("not updated",HttpStatus.BAD_REQUEST);
-//        }
     }
 
     @DeleteMapping("/students/{id}")

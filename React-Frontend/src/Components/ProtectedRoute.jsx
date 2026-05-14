@@ -1,15 +1,22 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
+import { getUserFromToken } from '../utils/auth';
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children, adminOnly = false }) => {
   const token = localStorage.getItem('token');
 
-  // If there's no token, redirect to the login page
   if (!token) {
     return <Navigate to="/login" replace />;
   }
 
-  // Otherwise, render the requested component
+  if (adminOnly) {
+    const user = getUserFromToken();
+    const isAdmin = user?.role === 'ADMIN' || user?.role === 'ROLE_ADMIN';
+    if (!isAdmin) {
+      return <Navigate to="/dashboard" replace />;
+    }
+  }
+
   return children;
 };
 

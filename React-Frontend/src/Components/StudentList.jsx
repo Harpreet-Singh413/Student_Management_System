@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import API from '../api/axios';
-import { FiSearch, FiTrash2, FiEdit } from 'react-icons/fi';
+import { FiSearch, FiTrash2, FiEdit, FiEye } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
+import { isAdmin } from '../utils/auth';
 
 const StudentList = () => {
   const [students, setStudents] = useState([]);
@@ -12,6 +13,7 @@ const StudentList = () => {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
+  const admin = isAdmin();
 
   useEffect(() => {
     fetchInitialData();
@@ -132,17 +134,30 @@ const StudentList = () => {
                   </td>
                   <td className="px-6 py-4 flex gap-3">
                     <button 
-                      className="text-blue-500 hover:text-blue-700" 
-                      onClick={() => navigate(`/edit-student/${student.id}`)}
+                      className="text-green-500 hover:text-green-700" 
+                      onClick={() => navigate(`/student-profile/${student.id}`)}
+                      title="View Profile"
                     >
-                      <FiEdit />
+                      <FiEye />
                     </button>
-                    <button
-                      onClick={() => handleDelete(student.id)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <FiTrash2 />
-                    </button>
+                    {admin && (
+                      <>
+                        <button 
+                          className="text-blue-500 hover:text-blue-700" 
+                          onClick={() => navigate(`/edit-student/${student.id}`)}
+                          title="Edit Student"
+                        >
+                          <FiEdit />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(student.id)}
+                          className="text-red-500 hover:text-red-700"
+                          title="Delete Student"
+                        >
+                          <FiTrash2 />
+                        </button>
+                      </>
+                    )}
                   </td>
                 </tr>
               ))}

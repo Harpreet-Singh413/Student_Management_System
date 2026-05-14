@@ -4,6 +4,7 @@ import com.example.Spring_Boot_Backend.Filter.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -40,7 +41,22 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/auth/login").permitAll()
-                        .anyRequest().authenticated())
+
+                        .requestMatchers(HttpMethod.GET, "/api/students/search").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/api/students/{id}").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/api/students").hasAnyRole("ADMIN", "TEACHER")
+
+                        .requestMatchers(HttpMethod.POST,   "/api/students").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,    "/api/students/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/students/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/api/departments").hasAnyRole("ADMIN", "TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/api/course").hasAnyRole("ADMIN", "TEACHER")
+
+                        .requestMatchers(HttpMethod.GET, "/api/stats").hasAnyRole("ADMIN", "TEACHER", "USER")
+
+                        .anyRequest().authenticated()
+                )
                 .httpBasic(Customizer.withDefaults())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -51,16 +67,12 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Allow your React local server
         configuration.setAllowedOrigins(Arrays.asList("https://student-management-system-two-fawn.vercel.app"));
 
-        // Allow standard methods
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
-        // Allow headers (Content-Type and Authorization for JWT)
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Cache-Control"));
 
-        // Allow browser to send/receive cookies if needed
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

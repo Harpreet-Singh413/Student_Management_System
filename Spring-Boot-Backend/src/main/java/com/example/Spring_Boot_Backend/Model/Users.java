@@ -18,6 +18,7 @@ public class Users {
     private Integer id;
     private String username;
     private String password;
+    private String role;
 
     @Override
     public String toString() {

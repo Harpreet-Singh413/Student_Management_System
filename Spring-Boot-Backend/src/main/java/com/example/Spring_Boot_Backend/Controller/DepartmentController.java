@@ -2,7 +2,6 @@ package com.example.Spring_Boot_Backend.Controller;
 
 import com.example.Spring_Boot_Backend.Model.Department;
 import com.example.Spring_Boot_Backend.Service.DepartmentService;
-import jakarta.persistence.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
